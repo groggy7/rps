@@ -7,21 +7,10 @@ const choices = new Map([
 const getComputerChoice = () => {
     const choice = Math.floor(Math.random() * 3) + 1;
 
-    if(choice >=1 && choice <=3 ) {
-        return choices.get(choice)
+    if(choice >= 1 && choice <= 3) {
+        return choices.get(choice);
     } else {
-        console.log("internal server error")
-    }
-}
-
-const getHumanChoice = () => {
-    let choice = prompt("rock, paper or scissors?...");
-
-    choice = choice.toLowerCase();
-    if(choice === "rock" || choice === "paper" || choice === "scissors") {
-        return choice;
-    } else {
-        console.error("invalid choice");
+        console.log("internal server error");
     }
 }
 
@@ -45,21 +34,23 @@ function playRound(humanChoice, computerChoice) {
     }
 }
 
-function playGame() {
-    for(let i = 0; i < 5; i++) {
+const displayWinner = () => {
+    const result = document.querySelector(".results");
+    result.innerText = `Winner is ${humanScore > computerScore ? "human" : "computer"}.
+    Human Score: ${humanScore} : ${computerScore} Computer Score`;
+}
+const gameButtons = document.querySelectorAll(".game-button")
+
+gameButtons.forEach(button => {
+    button.addEventListener("click", (event) => {
+        if(humanScore < 5 && computerScore < 5) {
+        const humanChoice = event.target.id;
         const computerChoice = getComputerChoice();
-        const humanChoice = getHumanChoice();
 
         playRound(humanChoice, computerChoice);
+        if(humanScore >= 5 || computerScore >= 5) {
+            displayWinner();
+        }
     }
-
-    if(humanScore > computerScore) {
-        console.log("Congrats! You are the winner");
-    } else if (computerScore > humanScore) {
-        console.log("Sorry, You lost")
-    } else {
-        console.log("There is no winner, Draw!")
-    }
-}
-
-playGame();
+    })
+})
